@@ -1,0 +1,48 @@
+app-id: org.hyphanet.hyphanet
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: w-hyphanet
+
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --share=network
+  - --env=PATH=/app/jre/bin:/usr/bin:/app/bin
+  - --persist=hyphanet
+
+add-extensions:
+  org.freedesktop.Sdk.Extension.openjdk17:
+    version: '24.08'
+    directory: jdk
+
+modules:
+  - name: jre
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/jdk
+      - ln -s jdk/jvm/openjdk-17 /app/jre
+
+  - name: hyphanet
+    buildsystem: simple
+    build-commands:
+      - mkdir /app/bin
+      - cp -r ./* /app/bin/
+    sources:
+      - type: file
+        url: https://www.draketo.de/dateien/freenet/build01501/new_installer_offline_1501.jar
+        sha256: 8d60e9152ab085180f8a1d096843ffcff0b31ee207351ef044fe6d15a198e5d3
+
+  - name: wrap-hyphanet
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 --target-directory=/app/bin w-hyphanet
+    sources:
+      - type: script
+        dest-filename: w-hyphanet
+        commands: 
+          - exec ~/hyphanet/bin/browse.sh
+
+
+
