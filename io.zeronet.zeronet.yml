@@ -1,0 +1,35 @@
+app-id: io.zeronet.zeronet
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: w-zeronet
+
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --share=network
+  - --persist=zeronet
+
+modules:
+
+  - name: zeronet
+    buildsystem: simple
+    build-commands:
+      - mkdir /app/bin
+      - cp -r ./* /app/bin/
+    sources:
+      - type: archive
+        url: https://github.com/HelloZeroNet/ZeroNet-linux/archive/dist-linux64/ZeroNet-py3-linux64.tar.gz
+        sha256: 4173c2ee78d53cf83211f3ef81811083ef90c44aa048a5faad4009d9bb99686a
+
+  - name: wrap-zeronet
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 --target-directory=/app/bin w-zeronet
+    sources:
+      - type: script
+        dest-filename: w-zeronet
+        commands: 
+          - exec ~/zeronet/ZeroNet.sh
+
