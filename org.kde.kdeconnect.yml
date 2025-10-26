@@ -1,0 +1,51 @@
+id: org.kde.kdeconnect
+runtime: org.kde.Sdk
+runtime-version: '6.9'
+sdk: org.kde.Sdk
+finish-args:
+  - --device=dri
+  - --share=ipc
+  - --share=network
+  - --socket=x11
+  - --own-name=org.kde.kdeconnect-indicator
+
+command: kdeconnect-app
+cleanup:
+  - '*.a'
+  - '*.la'
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/doc
+  - /share/man
+
+modules:
+  - name: pulseaudio-qt # https://invent.kde.org/libraries/pulseaudio-qt
+    buildsystem: cmake
+    sources:
+      - type: archive
+        path: pulseaudio-qt-master.tar.gz
+  - name: kpeople # https://invent.kde.org/frameworks/kpeople
+    buildsystem: cmake
+    sources:
+      - type: archive
+        path: kpeople-master.tar.gz
+  - name: libfakekey # https://git.yoctoproject.org/libfakekey/
+    buildsystem: autotools
+    sources:
+      - type: archive
+        path: libfakekey-0.3.tar.gz
+  - name: kdeconnect # https://invent.kde.org/network/kdeconnect-kde
+    buildsystem: cmake
+    sources:
+      - type: archive
+        path: kdeconnect-kde-v25.08.2.tar.gz
+  - name: appdata
+    buildsystem: simple
+    build-commands:
+      - rm -r /app/share/metainfo
+
+
+
+
+        
