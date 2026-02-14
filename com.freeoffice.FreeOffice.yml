@@ -1,0 +1,41 @@
+app-id: com.freeoffice.FreeOffice
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: textmaker24
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --persist=.
+
+modules:
+
+  - name: libXmu
+    buildsystem: autotools
+    sources:
+      - type: git
+        url: https://gitlab.freedesktop.org/xorg/lib/libxmu.git
+        tag: "libXmu-1.2.1"
+        commit: 792f80402ee06ce69bca3a8f2a84295999c3a170
+
+  - name: freeoffice
+    buildsystem: simple
+    build-commands:
+      - ar x freeoffice.deb
+      - tar -xJf data.tar.xz
+      - cp -ru ./usr/* /app/
+      - sed -i 's/\/usr\/share/\/app\/share/g' /app/bin/*
+      - rm /app/share/applications/*2024.desktop
+      - sed -i 's/\/usr/\/app/g' /app/share/applications/*
+    sources:
+      - type: file
+        path: softmaker-freeoffice-2024_1230-01_amd64.deb #https://www.softmaker.net/down/softmaker-freeoffice-2024_1230-01_amd64.deb
+        sha256: 6b2f2844d0c85912d53c8386cec6dfa6551c03927b2d7deff1fea9505d8f7142
+        dest-filename: freeoffice.deb
+        only-arches:
+          - x86_64
+        
+
