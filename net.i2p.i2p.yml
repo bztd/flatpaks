@@ -1,0 +1,46 @@
+app-id: net.i2p.i2p
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: run-i2p
+
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --share=network
+  - --env=PATH=/app/jre/bin:/usr/bin:/app/bin
+  - --persist=i2p-install
+  - --persist=.i2p
+  
+
+add-extensions:
+  org.freedesktop.Sdk.Extension.openjdk17:
+    version: '25.08'
+    directory: jdk
+    
+#~/i2p-aux/i2prouter start
+#If I2P does not start, please try:
+#~/i2p-aux/runplain.sh
+
+modules:
+  - name: jre
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/jdk
+      - ln -s jdk/jvm/openjdk-17 /app/jre
+
+      
+  - name: wrap-i2p
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 --target-directory=/app/bin run-i2p
+    sources:
+      - type: script
+        dest-filename: run-i2p
+        commands: 
+          - exec ~/i2p-install/i2prouter start
+    
+
+
+
