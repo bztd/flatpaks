@@ -19,6 +19,33 @@ cleanup:
   - /share/man
 
 modules:
+  - name: jinja2 #libei
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links=file://${PWD} --prefix=${FLATPAK_DEST} Jinja2 --no-build-isolation
+    cleanup:
+      - '*'
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl
+        sha256: 85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
+  - name: libevdev # libei
+    buildsystem: meson
+    config-opts:
+      - -Ddocumentation=disabled
+      - -Dtests=disabled
+    sources:
+      - type: archive
+        url: https://freedesktop.org/software/libevdev/libevdev-1.14.0.tar.xz
+        sha256: 5a0966c7110648665983848bad696c7acba614a2160d2865d535397101007332
+  - name: libei #wayland
+    buildsystem: meson
+    config-opts:
+      - -Dtests=disabled
+    sources:
+      - type: archive
+        url: https://gitlab.freedesktop.org/libinput/libei/-/archive/1.6.0/libei-1.6.0.tar.gz
+        sha256: 81b4b967f0e5938492434a04f7ea2e6c6d96d3e6c44700bc691821f82281e602
   - name: pulseaudio-qt
     buildsystem: cmake
     sources:
