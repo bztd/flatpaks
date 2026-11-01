@@ -1,7 +1,7 @@
 app-id: org.codelite.codelite
 runtime: org.freedesktop.Sdk
 sdk: org.freedesktop.Sdk
-runtime-version: '25.08'
+runtime-version: '26.08'
 command: codelite
 
 rename-desktop-file: codelite.desktop
