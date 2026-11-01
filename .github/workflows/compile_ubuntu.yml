@@ -1,0 +1,43 @@
+name: build flatpak kde
+
+env:
+  RUNTIME: "kde"
+  RUNTIME_V: "6.11"
+  
+on: 
+  workflow_dispatch:
+    input:
+      id:
+        description: "argumento ID"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:  
+  build_flatpak:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: compile_latest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:${{ env.RUNTIME }}-${{ env.RUNTIME_V }}
+      options: --privileged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Build
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: ${{ input.id }}.flatpak
+          manifest-path: ${{ input.id }}.yml
+          
+      - name: artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ input.id}}.flatpak
+          path: out/
+          retention-days: 30
+          if-no-files-found: error
