@@ -22,7 +22,7 @@ modules:
       - ln -s /app/syncthing /app/bin/syncthing
     sources:
       - type: archive
-        url: https://github.com/syncthing/syncthing/releases/download/v2.0.12/syncthing-linux-amd64-v2.0.12.tar.gz
-        sha256: a096082e9fff4c7b4884aab95b53afd0177316de544d517dd1fc7fe47d4ea4c3
+        url: https://github.com/syncthing/syncthing/releases/download/v2.1.7/syncthing-linux-amd64-v2.1.7.tar.gz
+        sha256: 2edc416e7ed136b7c858ed5f3f02a3b8316589605e54c380228ceea7acbf0142
 
 
