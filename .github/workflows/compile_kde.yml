@@ -2,7 +2,7 @@ name: build flatpak kde
   
 on: 
   workflow_dispatch:
-    input:
+    inputs:
       id:
         description: "argumento ID"
         required: true
@@ -10,10 +10,6 @@ on:
 
 permissions:
   contents: read
-
-env:
-  RUNTIME: "kde"
-  RUNTIME_V: "6.11"
 
 jobs:  
   build_flatpak:
@@ -23,7 +19,7 @@ jobs:
     permissions:
       contents: write
     container:
-      image: ghcr.io/flathub-infra/flatpak-github-actions:${{ env.RUNTIME }}-${{ env.RUNTIME_V }}
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.11
       options: --privileged
     steps:
       - name: Checkout
@@ -31,13 +27,13 @@ jobs:
       - name: Build
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          bundle: ${{ input.id }}.flatpak
-          manifest-path: ${{ input.id }}.yml
+          bundle: ${{ inputs.id }}.flatpak
+          manifest-path: ${{ inputs.id }}.yml
           
       - name: artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ input.id}}.flatpak
+          name: ${{ inputs.id}}.flatpak
           path: out/
           retention-days: 30
           if-no-files-found: error
