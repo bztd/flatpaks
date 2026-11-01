@@ -1,8 +1,4 @@
 name: build flatpak kde
-
-env:
-  RUNTIME: "kde"
-  RUNTIME_V: "6.11"
   
 on: 
   workflow_dispatch:
@@ -14,6 +10,10 @@ on:
 
 permissions:
   contents: read
+
+env:
+  RUNTIME: "kde"
+  RUNTIME_V: "6.11"
 
 jobs:  
   build_flatpak:
