@@ -1,0 +1,28 @@
+app-id: net.syncthing.syncthing
+runtime: org.freedesktop.Platform
+sdk: org.freedesktop.Sdk
+runtime-version: '25.08'
+command: syncthing
+
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --persist=.syncthing
+
+
+modules:
+
+  - name: syncthing
+    buildsystem: simple
+    build-commands:
+      - cp -ru ./* /app/
+      - mkdir -p /app/bin
+      - ln -s /app/syncthing /app/bin/syncthing
+    sources:
+      - type: archive
+        url: https://github.com/syncthing/syncthing/releases/download/v2.0.12/syncthing-linux-amd64-v2.0.12.tar.gz
+        sha256: a096082e9fff4c7b4884aab95b53afd0177316de544d517dd1fc7fe47d4ea4c3
+
+

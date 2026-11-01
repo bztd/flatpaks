@@ -1,12 +1,11 @@
 id: org.kde.kdeconnect
-runtime: org.kde.Sdk
-runtime-version: '6.9'
+runtime: org.kde.Platform
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 finish-args:
-  - --device=dri
-  - --share=ipc
   - --share=network
   - --socket=x11
+  - --share=ipc
   - --own-name=org.kde.kdeconnect-indicator
 
 command: kdeconnect-app
@@ -20,30 +19,30 @@ cleanup:
   - /share/man
 
 modules:
-  - name: pulseaudio-qt # https://invent.kde.org/libraries/pulseaudio-qt
+  - name: pulseaudio-qt
     buildsystem: cmake
     sources:
       - type: archive
-        path: pulseaudio-qt-master.tar.gz
-  - name: kpeople # https://invent.kde.org/frameworks/kpeople
+        url: https://invent.kde.org/libraries/pulseaudio-qt/-/archive/v1.9.0/pulseaudio-qt-v1.9.0.tar.bz2
+        sha256: dabef32e90c2ad59256f28adb4a6b089d98927a41846a97269f0c912e5197445
+  - name: kpeople
     buildsystem: cmake
     sources:
       - type: archive
-        path: kpeople-master.tar.gz
-  - name: libfakekey # https://git.yoctoproject.org/libfakekey/
+        url: https://invent.kde.org/frameworks/kpeople/-/archive/v6.31.0/kpeople-v6.31.0.tar.bz2
+        sha256: c12bbce1120cb582650a3d9f178acb35fba56d331da452d033bc0b2d19a12cde
+  - name: libfakekey #x11
     buildsystem: autotools
     sources:
-      - type: archive
-        path: libfakekey-0.3.tar.gz
-  - name: kdeconnect # https://invent.kde.org/network/kdeconnect-kde
+      - type: git
+        url: https://salsa.debian.org/matchbox-team/libfakekey.git
+        commit: 7081b036b4141377146998a59ef8e53f910f7709
+  - name: kdeconnect
     buildsystem: cmake
     sources:
       - type: archive
-        path: kdeconnect-kde-v25.08.2.tar.gz
-  - name: appdata
-    buildsystem: simple
-    build-commands:
-      - rm -r /app/share/metainfo
+        url: https://invent.kde.org/network/kdeconnect-kde/-/archive/v26.08.2/kdeconnect-kde-v26.08.2.tar.gz
+        sha256: bac5ae1a73292e8cef4bf4d800429c7e9032599d4c569aaf517002fc44e3430b
 
 
 
