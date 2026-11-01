@@ -1,0 +1,36 @@
+name: build flatpak freedesktop
+  
+on: 
+  workflow_dispatch:
+    inputs:
+      id:
+        description: "argumento ID"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:  
+  build_flatpak:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-26.08
+      options: --privileged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Build
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: ${{ inputs.id }}.flatpak
+          manifest-path: ${{ inputs.id }}.yml
+          
+      - name: artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.id}}.flatpak
+          path: out/
+          retention-days: 30
